@@ -5,7 +5,7 @@
     "description": "web_client",
     "main": "index.js",
     "scripts": {
-        "prepare": "webpack",
+        "build": "webpack",
         "start": "webpack serve",
         "prod-start": "node server.js",
         "build-start": "npm run prepare && npm run prod-start"
