@@ -23,6 +23,10 @@ function sectionKey (x, y, z) {
 
 const dirtySections = {}
 
+function getSectionIndex (y, minY = -64) {
+  return Math.abs(minY) + y >> 4
+}
+
 function setSectionDirty (pos, value = true) {
   const x = Math.floor(pos.x / 16) * 16
   const y = Math.floor(pos.y / 16) * 16
@@ -32,7 +36,7 @@ function setSectionDirty (pos, value = true) {
   if (!value) {
     delete dirtySections[key]
     postMessage({ type: 'sectionFinished', key })
-  } else if (chunk && chunk.sections[Math.floor(y / 16)]) {
+  } else if (chunk && chunk.sections[getSectionIndex(y, chunk.minY ?? 0)]) {
     dirtySections[key] = value
   } else {
     postMessage({ type: 'sectionFinished', key })
@@ -74,7 +78,7 @@ setInterval(() => {
     y = parseInt(y, 10)
     z = parseInt(z, 10)
     const chunk = world.getColumn(x, z)
-    if (chunk && chunk.sections[Math.floor(y / 16)]) {
+    if (chunk && chunk.sections[getSectionIndex(y, chunk.minY ?? 0)]) {
       delete dirtySections[key]
       const geometry = getSectionGeometry(x, y, z, world, blocksStates)
       const transferable = [geometry.positions.buffer, geometry.normals.buffer, geometry.colors.buffer, geometry.uvs.buffer]

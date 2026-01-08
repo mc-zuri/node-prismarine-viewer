@@ -113,7 +113,7 @@ function prepareBlocksStates (mcAssets, atlas) {
       all: 'blocks/missing_texture'
     }
   }
-  for (const block of Object.values(blocksStates)) {
+  for (const [key, block] of Object.entries(blocksStates)) {
     if (!block) continue
     if (block.variants) {
       for (const variant of Object.values(block.variants)) {

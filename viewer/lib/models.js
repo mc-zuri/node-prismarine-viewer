@@ -1,6 +1,6 @@
 const { Vec3 } = require('vec3')
 
-const tints = require('minecraft-data')('1.16.2').tints
+const tints = require('minecraft-data')('1.16.4').tints
 
 for (const key of Object.keys(tints)) {
   tints[key] = prepareTints(tints[key])
@@ -130,7 +130,7 @@ function renderLiquid (world, cursor, texture, type, biome, water, attr) {
     if (!neighbor) continue
     if (neighbor.type === type) continue
     if ((neighbor.isCube && !isUp) || neighbor.material === 'plant' || neighbor.getProperties().waterlogged) continue
-    if (neighbor.position.y < 0) continue
+    if (neighbor.position.y < -64) continue
 
     let tint = [1, 1, 1]
     if (water) {
@@ -241,7 +241,7 @@ function renderElement (world, cursor, element, doAO, attr, globalMatrix, global
       if (!neighbor) continue
       if (cullIfIdentical && neighbor.type === block.type) continue
       if (!neighbor.transparent && neighbor.isCube) continue
-      if (neighbor.position.y < 0) continue
+      if (neighbor.position.y < -64) continue
     }
 
     const minx = element.from[0]
@@ -378,7 +378,7 @@ function getSectionGeometry (sx, sy, sz, world, blocksStates) {
     indices: []
   }
 
-  const cursor = new Vec3(0, 0, 0)
+  const cursor = new Vec3(0, -64, 0)
   for (cursor.y = sy; cursor.y < sy + 16; cursor.y++) {
     for (cursor.z = sz; cursor.z < sz + 16; cursor.z++) {
       for (cursor.x = sx; cursor.x < sx + 16; cursor.x++) {

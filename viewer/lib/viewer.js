@@ -4,10 +4,12 @@ const { WorldRenderer } = require('./worldrenderer')
 const { Entities } = require('./entities')
 const { Primitives } = require('./primitives')
 const { getVersion } = require('./version')
+const { GamepadService } = require('./gamepad')
 const { Vec3 } = require('vec3')
 
 class Viewer {
   constructor (renderer) {
+    this.gamepadService = new GamepadService();
     this.scene = new THREE.Scene()
     this.scene.background = new THREE.Color('lightblue')
 
@@ -83,6 +85,8 @@ class Viewer {
   }
 
   listen (emitter) {
+    this.gamepadService.listen(emitter);
+    
     emitter.on('entity', (e) => {
       this.updateEntity(e)
     })
