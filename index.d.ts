@@ -7,6 +7,14 @@ export function mineflayer(bot: Bot, settings: {
     prefix?: string;
 });
 
+export function bedrockMineflayer(bot: Bot, settings: {
+    viewDistance?: number;
+    firstPerson?: boolean;
+    port?: number;
+    prefix?: string;
+    javaVersion?: string;
+});
+
 export function standalone(options: {
     version: versions;
     world: (x: number, y: number, z: number) => 0 | 1;
