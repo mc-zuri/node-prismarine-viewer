@@ -81,7 +81,17 @@ class Viewer {
       if (this.isSneaking) y -= 0.3
       new TWEEN.Tween(this.camera.position).to({ x: pos.x, y, z: pos.z }, 50).start()
     }
-    this.camera.rotation.set(pitch, yaw, 0, 'ZYX')
+    if (yaw !== undefined && pitch !== undefined) {
+      const fromYaw = this.camera.rotation.y
+      const TWO_PI = Math.PI * 2
+      const dy = ((yaw - fromYaw + Math.PI) % TWO_PI + TWO_PI) % TWO_PI - Math.PI
+      const proxy = { yaw: fromYaw, pitch: this.camera.rotation.x }
+      if (this._rotTween) this._rotTween.stop()
+      this._rotTween = new TWEEN.Tween(proxy)
+        .to({ yaw: fromYaw + dy, pitch }, 50)
+        .onUpdate(() => this.camera.rotation.set(proxy.pitch, proxy.yaw, 0, 'ZYX'))
+        .start()
+    }
   }
 
   listen (emitter) {
