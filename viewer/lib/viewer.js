@@ -99,6 +99,8 @@ class Viewer {
 
     emitter.on('config', (cfg) => {
       if (cfg?.stickSensitivity != null) this.gamepadService.stickSensitivity = cfg.stickSensitivity;
+      if (cfg?.pitchSensitivity != null) this.gamepadService.pitchSensitivity = cfg.pitchSensitivity;
+      if (cfg?.firstPerson != null) this.gamepadService.cameraMode = cfg.firstPerson ? 'first' : 'third';
     })
 
     emitter.on('entity', (e) => {

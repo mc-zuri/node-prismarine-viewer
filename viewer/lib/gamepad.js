@@ -4,6 +4,8 @@ export class GamepadService {
     mouseSensY = 0.5;
     stickSensitivity = 1;
     pitchSensitivity = 0.5;
+    cameraMode = 'first';
+    onCameraOrbit = null;
     lastCamUpdate = 0;
 
     controlsState = {
@@ -246,6 +248,11 @@ export class GamepadService {
 
     moveCameraRawHandler({ x, y }) {
         this.lastCamUpdate = Date.now();
+        if (this.cameraMode === 'third') {
+            if (this.onCameraOrbit && (x || y)) this.onCameraOrbit({ yaw: x, pitch: y });
+            this.updateCamera({ pitch: 0, yaw: -x });
+            return;
+        }
         this.updateCamera({ pitch: -y, yaw: -x });
     }
 }
