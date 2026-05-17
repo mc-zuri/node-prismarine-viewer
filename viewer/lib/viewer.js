@@ -86,7 +86,11 @@ class Viewer {
 
   listen (emitter) {
     this.gamepadService.listen(emitter);
-    
+
+    emitter.on('config', (cfg) => {
+      if (cfg?.stickSensitivity != null) this.gamepadService.stickSensitivity = cfg.stickSensitivity;
+    })
+
     emitter.on('entity', (e) => {
       this.updateEntity(e)
     })

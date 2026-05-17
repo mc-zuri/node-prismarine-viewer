@@ -2,6 +2,8 @@ export class GamepadService {
     preciseMouseInput = false;
     mouseSensX = 0.5;
     mouseSensY = 0.5;
+    stickSensitivity = 1;
+    pitchSensitivity = 0.5;
     lastCamUpdate = 0;
 
     controlsState = {
@@ -80,13 +82,8 @@ export class GamepadService {
         this.emitter = emitter;
     }
     updateCamera({ pitch, yaw }) {
-        if (this.camera.pitch === pitch && this.camera.yaw === yaw){
-            this.camera = { pitch, yaw };
-        };
-
-        if(this.camera.pitch !== 0 || this.camera.yaw !== 0){
-            this.onUpdate();
-        }
+        this.camera = { pitch, yaw };
+        if (pitch !== 0 || yaw !== 0) this.onUpdate();
     }
 
     updateControlsState(changes) {
@@ -240,17 +237,15 @@ export class GamepadService {
         if (now - this.lastMouseMove < 4 && !this.preciseMouseInput) return;
         this.lastMouseMove = now;
 
+        const scale = e.type === 'stickMovement' ? 0.008 * this.stickSensitivity : 0.0001;
         this.moveCameraRawHandler({
-            x: e.movementX * this.mouseSensX * 0.0001,
-            y: e.movementY * this.mouseSensY * 0.0001,
+            x: e.movementX * this.mouseSensX * scale,
+            y: e.movementY * this.mouseSensY * scale * this.pitchSensitivity,
         });
     }
 
     moveCameraRawHandler({ x, y }) {
-        const maxPitch = 0.5 * Math.PI;
-        const minPitch = -0.5 * Math.PI;
         this.lastCamUpdate = Date.now();
-
         this.updateCamera({ pitch: -y, yaw: -x });
     }
 }
